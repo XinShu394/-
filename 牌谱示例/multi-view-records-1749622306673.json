@@ -1,0 +1,285 @@
+{
+  "version": "1.0",
+  "type": "multi-view-game-records",
+  "exportDate": "2025-06-11T06:11:46.673Z",
+  "records": [
+    {
+      "id": "mvgr_1749622304955_qaybzzdwo",
+      "title": "多视角读牌练习（听牌判断）",
+      "source": "麻将进阶教程 第6章",
+      "tags": [
+        "多视角",
+        "读牌",
+        "听牌分析",
+        "防守"
+      ],
+      "category": "reading_opponents",
+      "gameState": {
+        "mainViewPlayer": "south",
+        "windRound": "east",
+        "roundNumber": 1,
+        "honbaCount": 0,
+        "riichiSticks": 0,
+        "players": {
+          "east": {
+            "position": "east",
+            "handTiles": [],
+            "melds": [],
+            "discardedTiles": [
+              {
+                "tile": "1z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 1
+              },
+              {
+                "tile": "3z",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 2
+              },
+              {
+                "tile": "5z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 3
+              },
+              {
+                "tile": "7z",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 4
+              },
+              {
+                "tile": "2m",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 5
+              },
+              {
+                "tile": "4m",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 6
+              },
+              {
+                "tile": "6p",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 7
+              }
+            ],
+            "score": 24800,
+            "isRiichi": false
+          },
+          "south": {
+            "position": "south",
+            "handTiles": [
+              "1m",
+              "2m",
+              "3m",
+              "4p",
+              "5p",
+              "6p",
+              "7s",
+              "8s",
+              "1z",
+              "2z",
+              "4z"
+            ],
+            "melds": [
+              {
+                "type": "peng",
+                "tiles": [
+                  "3s",
+                  "3s",
+                  "3s"
+                ],
+                "fromPlayer": "east"
+              }
+            ],
+            "discardedTiles": [
+              {
+                "tile": "9z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 1
+              },
+              {
+                "tile": "8z",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 2
+              },
+              {
+                "tile": "4z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 3
+              },
+              {
+                "tile": "6z",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 4
+              },
+              {
+                "tile": "3m",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 5
+              },
+              {
+                "tile": "9p",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 6
+              },
+              {
+                "tile": "5z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 7
+              }
+            ],
+            "score": 25200,
+            "isRiichi": false
+          },
+          "west": {
+            "position": "west",
+            "handTiles": [],
+            "melds": [
+              {
+                "type": "chi",
+                "tiles": [
+                  "2p",
+                  "3p",
+                  "4p"
+                ],
+                "fromPlayer": "south"
+              }
+            ],
+            "discardedTiles": [
+              {
+                "tile": "1m",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 1
+              },
+              {
+                "tile": "5z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 2
+              },
+              {
+                "tile": "9m",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 3
+              },
+              {
+                "tile": "8p",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 4
+              },
+              {
+                "tile": "6z",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 5
+              },
+              {
+                "tile": "2z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 6
+              },
+              {
+                "tile": "3z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 7
+              }
+            ],
+            "score": 25000,
+            "isRiichi": false
+          },
+          "north": {
+            "position": "north",
+            "handTiles": [],
+            "melds": [],
+            "discardedTiles": [
+              {
+                "tile": "7z",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 1
+              },
+              {
+                "tile": "3p",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 2
+              },
+              {
+                "tile": "1p",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 3
+              },
+              {
+                "tile": "6m",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 4
+              },
+              {
+                "tile": "9s",
+                "type": "hand_cut",
+                "isRiichi": false,
+                "order": 5
+              },
+              {
+                "tile": "5s",
+                "type": "draw_cut",
+                "isRiichi": true,
+                "order": 6
+              },
+              {
+                "tile": "8z",
+                "type": "draw_cut",
+                "isRiichi": false,
+                "order": 7
+              }
+            ],
+            "score": 25000,
+            "isRiichi": true,
+            "riichiTurn": 6
+          }
+        },
+        "remainingTiles": 89,
+        "doraIndicators": [
+          "5m",
+          "7p"
+        ],
+        "uraDoraIndicators": [],
+        "currentTurn": "south",
+        "turnCount": 8,
+        "isLastTile": false,
+        "isFirstTurn": false
+      },
+      "keyPoints": [],
+      "learningObjectives": [],
+      "createdAt": "2025-06-11T06:11:44.956Z",
+      "updatedAt": "2025-06-11T06:11:44.956Z",
+      "metadata": {
+        "estimatedTime": 10,
+        "prerequisites": [],
+        "relatedRecords": [],
+        "difficulty": "intermediate"
+      }
+    }
+  ]
+}

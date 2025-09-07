@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多视角麻将牌谱系统测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #2196F3;
+        }
+        .header h1 {
+            margin: 0;
+            color: #1976D2;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .section h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #2196F3;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        .help-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .form-row-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        /* 多视角牌桌布局 */
+        .table-layout {
+            display: grid;
+            grid-template-areas: 
+                ". top ."
+                "left center right"
+                ". bottom .";
+            grid-template-columns: 250px 1fr 250px;
+            grid-template-rows: 180px 1fr 180px;
+            gap: 10px;
+            margin: 20px auto;
+            background: white;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            max-width: 800px;
+            min-height: 550px;
+        }
+        .player-area {
+            background: white;
+            border: 1px solid #999;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .player-top { 
+            grid-area: top; 
+            transform: rotate(180deg);
+        }
+        .player-right { 
+            grid-area: right; 
+            transform: rotate(-90deg);
+        }
+        .player-bottom { 
+            grid-area: bottom; 
+        }
+        .player-left { 
+            grid-area: left; 
+            transform: rotate(90deg);
+        }
+        .center-info { 
+            grid-area: center; 
+            background: #fafafa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .player-header {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 6px;
+            padding: 3px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 11px;
+        }
+        .player-header.main-view {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-bottom: 1px solid #1976d2;
+        }
+        
+        .player-info {
+            font-size: 10px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .hand-tiles {
+            margin: 3px 0;
+            font-size: 10px;
+        }
+        
+        .melds-display {
+            margin: 3px 0;
+            font-size: 10px;
+        }
+        
+        .discarded-area {
+            padding: 3px;
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 3px;
+            min-height: 40px;
+            flex: 1;
+        }
+        
+        .discard-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1px;
+        }
+        
+        .tile {
+            display: inline-block;
+            background: white;
+            border: 1px solid #666;
+            padding: 1px 2px;
+            margin: 0.5px;
+            border-radius: 2px;
+            font-size: 14px;
+            min-width: 18px;
+            text-align: center;
+            font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+            line-height: 1.1;
+        }
+        
+        .tile.hand-cut {
+            background: #f0f0f0;
+            border-color: #999;
+        }
+        
+        .tile.auto-cut {
+            background: white;
+            border-color: #666;
+        }
+        
+        .tile.riichi {
+            background: #ffe6e6;
+            border-color: #ff9999;
+            transform: rotate(90deg);
+            margin: 0.5px 4px;
+        }
+        
+        .riichi-stick {
+            position: absolute;
+            width: 30px;
+            height: 3px;
+            background: #ff4444;
+            border-radius: 1px;
+            border: 1px solid #cc0000;
+            top: 5px;
+            right: 5px;
+            z-index: 10;
+        }
+        
+        .riichi-stick::before {
+            content: "立直";
+            position: absolute;
+            top: -15px;
+            right: -5px;
+            font-size: 8px;
+            color: #cc0000;
+            font-weight: bold;
+        }
+        
+        .dora-display {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 3px;
+            padding: 4px;
+            margin: 3px 0;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .game-status {
+            margin: 2px 0;
+            font-size: 11px;
+        }
+        
+        .current-turn-indicator {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        
+        .melds-area {
+            border: 1px solid #ddd;
+            padding: 5px;
+            margin: 5px 0;
+            background: #f5f5f5;
+            border-radius: 4px;
+            min-height: 30px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            border-bottom: 2px solid transparent;
+            margin-right: 2px;
+        }
+        .tab.active {
+            border-bottom-color: #2196F3;
+            background: #f0f8ff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
+        .button {
+            background: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        .button:hover {
+            background: #1976D2;
+        }
+        .button.secondary {
+            background: #757575;
+        }
+        .button.secondary:hover {
+            background: #616161;
+        }
+        .button.success {
+            background: #4CAF50;
+        }
+        .button.success:hover {
+            background: #45a049;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        .alert.success {
+            background: #e8f5e8;
+            border: 1px solid #4CAF50;
+            color: #2e7d32;
+        }
+        .alert.warning {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            color: #f57c00;
+        }
+        .alert.info {
+            background: #e3f2fd;
+            border: 1px solid #2196F3;
+            color: #1565C0;
+        }
+        
+        .validation-info {
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 4px solid #ff9800;
+        }
+        .validation-info.valid {
+            background: #e8f5e8;
+            border-left-color: #4CAF50;
+        }
+        .validation-info.invalid {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        
+        @media (max-width: 1200px) {
+            .table-layout {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+        @media (max-width: 900px) {
+            .table-layout {
+                grid-template-areas: 
+                    "top"
+                    "center"
+                    "left"
+                    "right"
+                    "bottom";
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🀄 多视角麻将牌谱系统测试</h1>
+            <p>支持四玩家完整牌局状态记录，包含手切/摸切弃牌分析</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('setup')">🎯 场况设置</button>
+            <button class="tab" onclick="showTab('input')">📝 牌局输入</button>
+            <button class="tab" onclick="showTab('preview')">👁️ 牌桌预览</button>
+            <button class="tab" onclick="showTab('records')">📚 牌谱浏览</button>
+            <button class="tab" onclick="showTab('help')">📖 格式说明</button>
+        </div>
+
+        <!-- 场况设置 -->
+        <div id="setup" class="tab-content active">
+            <div class="section">
+                <h3>🎮 基本信息</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="title">牌谱标题 *</label>
+                        <input type="text" id="title" placeholder="例：多视角读牌练习">
+                    </div>
+                    <div class="form-group">
+                        <label for="source">来源</label>
+                        <input type="text" id="source" placeholder="例：麻将进阶教程 第5章">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">分类</label>
+                        <select id="category">
+                            <option value="basic_patterns">基础牌型</option>
+                            <option value="defensive_play">防守技巧</option>
+                            <option value="offensive_play">进攻技巧</option>
+                            <option value="endgame">终盘技巧</option>
+                            <option value="riichi_strategy">立直策略</option>
+                            <option value="tile_efficiency">效率打法</option>
+                            <option value="reading_opponents" selected>读牌技巧</option>
+                            <option value="professional_games">职业对局</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">标签（用逗号分隔）</label>
+                        <input type="text" id="tags" placeholder="例：多视角, 读牌, 防守">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🎯 场况设置</h3>
+                <div class="form-row-4">
+                    <div class="form-group">
+                        <label for="mainViewPlayer">主视角玩家 *</label>
+                        <select id="mainViewPlayer" onchange="updateTableLayout()">
+                            <option value="east">东家</option>
+                            <option value="south" selected>南家</option>
+                            <option value="west">西家</option>
+                            <option value="north">北家</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="windRound">场风</label>
+                        <select id="windRound">
+                            <option value="east" selected>东场</option>
+                            <option value="south">南场</option>
+                            <option value="west">西场</option>
+                            <option value="north">北场</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="roundNumber">局数</label>
+                        <select id="roundNumber">
+                            <option value="1" selected>1局</option>
+                            <option value="2">2局</option>
+                            <option value="3">3局</option>
+                            <option value="4">4局</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="honbaCount">本场数</label>
+                        <input type="number" id="honbaCount" value="0" min="0">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="currentTurn">当前轮到</label>
+                        <select id="currentTurn">
+                            <option value="east">东家</option>
+                            <option value="south" selected>南家</option>
+                            <option value="west">西家</option>
+                            <option value="north">北家</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="riichiSticks">立直棒</label>
+                        <input type="number" id="riichiSticks" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>当前巡目</label>
+                        <div id="currentTurnDisplay" style="padding: 8px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; font-weight: bold;">
+                            自动计算中...
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>剩余牌数</label>
+                        <div id="remainingTilesDisplay" style="padding: 8px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; font-weight: bold;">
+                            自动计算中...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="doraIndicators">宝牌指示牌 *</label>
+                    <input type="text" id="doraIndicators" placeholder="例：5m 3p" required>
+                    <div class="help-text">用空格或逗号分隔多个指示牌</div>
+                </div>
+            </div>
+
+            <button class="button" onclick="showTab('input')">📝 下一步：输入牌局</button>
+        </div>
+
+        <!-- 牌局输入 -->
+        <div id="input" class="tab-content">
+            <div id="playerInputSections">
+                <!-- 动态生成四个玩家的输入区域 -->
+            </div>
+            
+            <div class="validation-info" id="overallValidation">
+                <strong>整体验证：</strong><span id="overallValidationInfo">请完善各玩家信息</span>
+            </div>
+
+            <button class="button success" onclick="loadSampleData()">📝 加载示例数据</button>
+            <button class="button" onclick="uploadRecord()">💾 保存牌谱</button>
+            <button class="button secondary" onclick="clearAllInputs()">🗑️ 清空所有</button>
+            <button class="button" onclick="showTab('preview')">👁️ 预览牌桌</button>
+        </div>
+
+        <!-- 牌桌预览 -->
+        <div id="preview" class="tab-content">
+            <div class="table-layout" id="tablePreview">
+                <!-- 动态生成牌桌布局 -->
+            </div>
+        </div>
+
+        <!-- 牌谱浏览 -->
+        <div id="records" class="tab-content">
+            <div id="recordsList"></div>
+        </div>
+
+        <!-- 格式说明 -->
+        <div id="help" class="tab-content">
+            <div class="section">
+                <h3>📖 多视角牌谱特点</h3>
+                <p>多视角牌谱记录完整的四人麻将牌局状态，包括每个玩家的手牌、副露、弃牌河等信息，适用于复杂的牌局分析和教学。</p>
+            </div>
+
+            <div class="section">
+                <h3>🎯 主视角设置</h3>
+                <p>选择主视角玩家后，系统会按照麻将桌的标准布局排列四家：</p>
+                <ul>
+                    <li><strong>下方</strong>：主视角玩家（显示完整手牌）</li>
+                    <li><strong>右方</strong>：顺时针下一家</li>
+                    <li><strong>上方</strong>：对家</li>
+                    <li><strong>左方</strong>：逆时针下一家</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>🀄 弃牌河格式</h3>
+                <p>弃牌河支持手切/摸切标记：</p>
+                <ul>
+                    <li><strong>摸切</strong>：1m 2p 3s（正常输入）</li>
+                    <li><strong>手切</strong>：1m* 2p* 3s*（加星号标记）</li>
+                    <li><strong>立直宣言</strong>：1m! 2p!（加感叹号）</li>
+                </ul>
+                <p>示例：1z 2z* 3z 4z* 5z!（第2、4张为手切，第5张为立直宣言）</p>
+            </div>
+
+            <div class="section">
+                <h3>🎴 副露格式</h3>
+                <p>与单视角相同的副露格式：</p>
+                <ul>
+                    <li><strong>吃牌</strong>：吃123m(东)</li>
+                    <li><strong>碰牌</strong>：碰555s(南)</li>
+                    <li><strong>明杠</strong>：明杠7777p(西)</li>
+                    <li><strong>暗杠</strong>：暗杠2222m</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>📏 验证规则</h3>
+                <ul>
+                    <li><strong>主视角玩家</strong>：必须输入手牌，总数为13或14张</li>
+                    <li><strong>其他玩家</strong>：手牌可选，但如有输入也需符合13/14张规则</li>
+                    <li><strong>弃牌河</strong>：按时间顺序排列，支持手切/摸切标记</li>
+                    <li><strong>立直状态</strong>：可标记哪些玩家处于立直状态</li>
+                    <li><strong>当前轮次</strong>：系统会验证当前轮次玩家的手牌数量和弃牌逻辑是否合理</li>
+                    <li><strong>自动计算</strong>：当前巡目根据弃牌河最大牌数计算，剩余牌数根据所有显露牌计算</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h3>🧠 牌理验证</h3>
+                <p>系统会自动验证当前轮次玩家的牌理合理性：</p>
+                <ul>
+                    <li><strong>手牌数量</strong>：当前轮次玩家应有14张（刚摸牌）或13张（已打牌）</li>
+                    <li><strong>弃牌逻辑</strong>：弃牌数量应与其他玩家的弃牌数量保持合理差距</li>
+                    <li><strong>巡目计算</strong>：根据所有玩家弃牌河中的最大牌数自动计算当前巡目</li>
+                    <li><strong>状态提示</strong>：14张=准备打牌，13张=可能已完成本轮次</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="multi-view-app.js"></script>
+</body>
+</html> 
